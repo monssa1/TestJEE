@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="UserCreateDlg" widgetVar="UserCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{myBundle.CreateUserTitle}" closeOnEscape="true">
+
+            <h:form id="UserCreateForm">
+
+                <h:panelGroup id="display" rendered="#{userController.selected != null}">
+                    <p:panelGrid columns="2" columnClasses="column">
+
+                        <p:outputLabel value="#{myBundle.CreateUserLabel_login}" for="login" />
+                        <p:inputText id="login" value="#{userController.selected.login}" title="#{myBundle.CreateUserTitle_login}" required="true" requiredMessage="#{myBundle.CreateUserRequiredMessage_login}" size="20" maxlength="20"/>
+
+                        <p:outputLabel value="#{myBundle.CreateUserLabel_password}" for="password" />
+                        <p:inputText id="password" value="#{userController.selected.password}" title="#{myBundle.CreateUserTitle_password}" required="true" requiredMessage="#{myBundle.CreateUserRequiredMessage_password}" size="35" maxlength="35"/>
+
+                        <p:outputLabel value="#{myBundle.CreateUserLabel_nom}" for="nom" />
+                        <p:inputText id="nom" value="#{userController.selected.nom}" title="#{myBundle.CreateUserTitle_nom}" required="true" requiredMessage="#{myBundle.CreateUserRequiredMessage_nom}" size="30" maxlength="30"/>
+
+                        <p:outputLabel value="#{myBundle.CreateUserLabel_prenom}" for="prenom" />
+                        <p:inputText id="prenom" value="#{userController.selected.prenom}" title="#{myBundle.CreateUserTitle_prenom}" required="true" requiredMessage="#{myBundle.CreateUserRequiredMessage_prenom}" size="30" maxlength="30"/>
+
+                        <p:outputLabel value="#{myBundle.CreateUserLabel_adresse}" for="adresse" />
+                        <p:inputText id="adresse" value="#{userController.selected.adresse}" title="#{myBundle.CreateUserTitle_adresse}" required="true" requiredMessage="#{myBundle.CreateUserRequiredMessage_adresse}" size="255" maxlength="255"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{userController.saveNew}" value="#{myBundle.Save}" update="display,:UserListForm:datalist,:growl" oncomplete="handleSubmit(xhr,status,args,PF('UserCreateDialog'));">
+                        <p:confirm header="#{myBundle.ConfirmationHeader}" message="#{myBundle.ConfirmCreateMessage}" icon="ui-icon-alert"/>
+                    </p:commandButton>
+
+                    <p:commandButton value="#{myBundle.Cancel}" oncomplete="PF('UserCreateDialog').hide()" update="display" process="@this" immediate="true" resetValues="true"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

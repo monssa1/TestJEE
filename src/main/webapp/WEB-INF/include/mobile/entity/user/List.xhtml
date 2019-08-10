@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pm="http://primefaces.org/mobile">
+
+    <pm:page id="UserListPage">
+        <pm:header title="#{myBundle.ListUserTitle}">
+            <h:form>
+                <p:commandButton id="backButton"   styleClass="ui-btn-left  ui-btn-inline" icon="ui-icon-arrow-l" value="#{myBundle.Back}" action="#{mobilePageController.navigateBackInHistory('/mobile/index')}"/>
+                <p:commandButton id="createButton" styleClass="ui-btn-right ui-btn-inline" icon="ui-icon-plus"    value="#{myBundle.Create}" update=":UserCreatePage:UserCreateForm" actionListener="#{userController.prepareCreate}" action="#{mobilePageController.navigateWithHistory('pm:UserCreatePage')}">
+                    <f:actionListener binding="#{currentPageListener}"/>
+                </p:commandButton>
+            </h:form>
+        </pm:header>
+
+        <pm:content>
+
+            <h:form id="UserListForm">
+
+                <p:dataTable id="datalist"
+                             value="#{userController.items}"
+                             var="item"
+                             rowKey="#{item.id}"
+                             paginator="true"
+                             rows="10"
+                             rowsPerPageTemplate="10,20,30,40,50"
+                             selectionMode="single"
+                             selection="#{userController.selected}"
+                             reflow="true">
+
+                    <p:ajax event="rowSelect"   update="@form:editButton,@form:deleteButton"/>
+                    <p:ajax event="rowUnselect" update="@form:editButton,@form:deleteButton"/>
+                    <p:ajax event="swipeleft"   oncomplete="document.getElementById('UserListPage:UserListForm:deleteButton').click();"/>
+                    <p:ajax event="tap"         oncomplete="document.getElementById('UserListPage:UserListForm:editButton').click();"/>
+
+                    <p:column sortBy="#{item.id}" filterBy="#{item.id}" headerText="#{myBundle.ListUserTitle_id}">
+                        <h:outputText value="#{item.id}"/>
+                    </p:column>
+
+
+                    <p:column sortBy="#{item.login}" filterBy="#{item.login}" headerText="#{myBundle.ListUserTitle_login}">
+                        <h:outputText value="#{item.login}"/>
+                    </p:column>
+
+
+                    <p:column sortBy="#{item.password}" filterBy="#{item.password}" headerText="#{myBundle.ListUserTitle_password}">
+                        <h:outputText value="#{item.password}"/>
+                    </p:column>
+
+
+                    <p:column sortBy="#{item.nom}" filterBy="#{item.nom}" headerText="#{myBundle.ListUserTitle_nom}">
+                        <h:outputText value="#{item.nom}"/>
+                    </p:column>
+
+
+                    <p:column sortBy="#{item.prenom}" filterBy="#{item.prenom}" headerText="#{myBundle.ListUserTitle_prenom}">
+                        <h:outputText value="#{item.prenom}"/>
+                    </p:column>
+
+
+                    <p:column sortBy="#{item.adresse}" filterBy="#{item.adresse}" headerText="#{myBundle.ListUserTitle_adresse}">
+                        <h:outputText value="#{item.adresse}"/>
+                    </p:column>
+
+                </p:dataTable>
+                <p:commandButton id="editButton"   style="visibility: hidden;" icon="ui-icon-pencil" value="#{myBundle.Edit}" update=":UserEditPage:UserEditForm" disabled="#{empty userController.selected}" actionListener="#{mobilePageController.currentPageListener}" action="#{mobilePageController.navigateWithHistory('pm:UserEditPage')}"/>
+                <p:commandButton id="deleteButton" style="visibility: hidden;" icon="ui-icon-trash"  value="#{myBundle.Delete}" actionListener="#{userController.delete}" update=":growl,datalist" disabled="#{empty userController.selected}">
+                    <p:confirm header="#{myBundle.ConfirmationHeader}" message="#{myBundle.ConfirmDeleteMessage}" icon="ui-icon-alert"/>
+                </p:commandButton>
+            </h:form>
+
+        </pm:content>
+
+    </pm:page>
+
+</ui:composition>
